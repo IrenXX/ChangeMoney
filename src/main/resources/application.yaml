@@ -1,0 +1,18 @@
+# DataSource properties
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/exchange
+    username: postgres
+    password: 9889
+  jpa:
+    show-sql: true
+  hibernate:
+    ddl-auto: validate
+
+flyway:
+    enabled: true
+
+
