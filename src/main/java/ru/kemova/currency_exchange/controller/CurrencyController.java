@@ -9,13 +9,13 @@ import ru.kemova.currency_exchange.services.CurrencyService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/currency")
+@RequestMapping("/currency-exchange")
 @RequiredArgsConstructor
 public class CurrencyController {
 
     private final CurrencyService currencyService;
 
-    @GetMapping()//findAll
+    @GetMapping("/currencies")//findAll
     public List<Currency> findAll() {
         return currencyService.findAll();
     }
@@ -25,7 +25,7 @@ public class CurrencyController {
         return currencyService.findById(id);
     }
 
-    @PostMapping("/new")
+    @PostMapping("/currencies")
     @ResponseStatus(HttpStatus.CREATED)
     public void create(@RequestBody Currency currency) {
         currencyService.create(currency);
