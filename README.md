@@ -1,5 +1,5 @@
 # currency-exchange-service
-Currency exchange service : REST API, Servlets, Spring Data, PostgreSQL, Lombok, Jackson, Slf4J, JUnit, AssertJ
+Currency exchange service : REST API, Flyway, Spring Data, Lombok, Jackson, Slf4J, JUnit, PostgreSQL
 
 # Postman documentation
 https://documenter.getpostman.com/view/26533447/2s946o2oDU
@@ -7,7 +7,7 @@ https://documenter.getpostman.com/view/26533447/2s946o2oDU
 ### Application is available at <a href="http://localhost:8080/currency-exchange/"> currency-exchange <a/>
 
 # Техническое задание
-REST API для описания валют и обменных курсов. Позволяет просматривать и редактировать списки валют и обменных курсов, и совершать расчёт конвертации произвольных сумм из одной валюты в другую.
+REST API для описания валют и обменных курсов. Позволяет просматривать и редактировать списки валют и обменных курсов, совершать расчёт конвертации произвольных сумм из одной валюты в другую.
 
 Веб-интерфейс для проекта не подразумевается.
 
@@ -30,7 +30,7 @@ REST API для описания валют и обменных курсов. П
 #### - POST /exchangeRates
 Добавление нового обменного курса в базу. Данные передаются в теле запроса в виде полей формы (x-www-form-urlencoded). Поля формы - baseCurrencyCode, targetCurrencyCode, rate.
 
-#### - PATCH /exchangeRate/USDRUB
+#### - PUT /exchangeRate/USDRUB
 Обновление существующего в базе обменного курса. Валютная пара задаётся идущими подряд кодами валют в адресе запроса. Данные передаются в теле запроса в виде полей формы (x-www-form-urlencoded). Единственное поле формы - rate.
 
 #### - GET /exchange?from=BASE_CURRENCY_CODE&to=TARGET_CURRENCY_CODE&amount=$AMOUNT
@@ -39,7 +39,7 @@ REST API для описания валют и обменных курсов. П
 #### Получение курса для обмена может пройти по одному из трёх сценариев. Допустим, совершаем перевод из валюты A в валюту B:
 
 В таблице ExchangeRates существует валютная пара AB - берём её курс
-В таблице ExchangeRates существует валютная пара BA - берем её курс, и считаем обратный, чтобы получить AB
+В таблице ExchangeRates существует валютная пара BC - берем её курс, считаем обратный курс, чтобы получить AB
 В таблице ExchangeRates существуют валютные пары USD-A и USD-B - вычисляем из этих курсов курс AB
 Остальные возможные сценарии, для упрощения, опустим.
 
