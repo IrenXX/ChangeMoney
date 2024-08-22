@@ -1,8 +1,7 @@
 package ru.kemova.currency_exchange.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,9 +13,18 @@ import lombok.NoArgsConstructor;
 public class ExchangeRate {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String baseCode;
-    private String targetCode;
+
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JoinColumn(name = "base_currency_id")
+    private Currency baseCurrency;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "target_currency_id")
+    private Currency targetCurrency;
+
+    @NotBlank
     private double rate;
+
 }

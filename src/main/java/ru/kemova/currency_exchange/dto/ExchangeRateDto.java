@@ -11,7 +11,7 @@ import ru.kemova.currency_exchange.model.Currency;
 public class ExchangeRateDto {
 
     private Integer id;
-    private Currency base;
-    private Currency target;
+    private String baseCode;
+    private String targetCode;
     private double rate;
 }

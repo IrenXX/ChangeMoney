@@ -46,21 +46,20 @@ public class CurrencyServiceImpl implements CurrencyService {
         return currencyRepository.findById(id).get();
     }
 
-
     @Transactional
     @Override
     public void create(Currency currency) {
-        log.info("create currency in database : " + currency.getId());
+        log.info("create currency in database");
         Currency created;
 
-        if (currencyRepository.findById(currency.getId()).isEmpty())
+        if (currencyRepository.findByCode(currency.getCode()).isEmpty()) {
             created = currencyRepository.save(currency);
-        else {
+            log.info("recorder writes with ID: " + currency.getId());
+        } else {
             log.error("already exists exception thrown");
             throw new CurrencyException("currency already exists");
         }
     }
-
 
     @Transactional
     @Override
@@ -72,7 +71,6 @@ public class CurrencyServiceImpl implements CurrencyService {
         }
         currencyRepository.save(currency);
     }
-
 
     @Transactional
     @Override

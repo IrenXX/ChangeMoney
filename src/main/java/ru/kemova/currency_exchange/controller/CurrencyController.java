@@ -9,7 +9,7 @@ import ru.kemova.currency_exchange.services.CurrencyService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/currency-exchange")
+@RequestMapping()
 @RequiredArgsConstructor
 public class CurrencyController {
 
@@ -20,26 +20,26 @@ public class CurrencyController {
         return currencyService.findAll();
     }
 
-    @GetMapping("/{id}") //findById
-    public Currency findById(@PathVariable Integer id) {
-        return currencyService.findById(id);
+    @GetMapping("/currency/{code}") //findByCode
+    public Currency findByCode(@PathVariable String code) {
+        return currencyService.findByCode(code);
     }
 
-    @PostMapping("/currencies")
+    @PostMapping("/currency")
     @ResponseStatus(HttpStatus.CREATED)
     public void create(@RequestBody Currency currency) {
         currencyService.create(currency);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/currency")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void updateProduct(@RequestBody Currency currency) {
+    public void update(@RequestBody Currency currency) {
         currencyService.update(currency);
     }
 
-    @DeleteMapping("/delete/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    void delete(@PathVariable Integer id) {
+    @DeleteMapping("/currency/{id}")
+    @ResponseStatus(HttpStatus.GONE)
+    public void delete(@PathVariable Integer id) {
         currencyService.delete(id);
     }
 }
