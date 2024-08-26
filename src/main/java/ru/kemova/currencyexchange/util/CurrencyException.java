@@ -1,4 +1,4 @@
-package ru.kemova.currency_exchange.util;
+package ru.kemova.currencyexchange.util;
 
 public class CurrencyException extends RuntimeException {
     public CurrencyException(String message) {

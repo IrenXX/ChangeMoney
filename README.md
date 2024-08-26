@@ -1,10 +1,10 @@
 # currency-exchange-service
-Currency exchange service : REST API, Json, Flyway, Spring Data, Lombok, Jackson, Slf4J, JUnit, PostgreSQL
+Currency exchange service : REST API, Json, Jackson, Flyway, Spring Data, Lombok, Slf4J, JUnit, PostgreSQL
 
 # Postman documentation
 https://documenter.getpostman.com/view/26533447/2s946o2oDU
 
-### Application is available at <a href="http://localhost:8080/currency-exchange/"> currency-exchange <a/>
+### Application is available at <a href="http://localhost:8080/currency/"> currency-exchange <a/>
 
 # Техническое задание
 REST API для описания валют и обменных курсов. Позволяет просматривать и редактировать списки валют и обменных курсов, совершать расчёт конвертации произвольных сумм из одной валюты в другую.
@@ -12,29 +12,29 @@ REST API для описания валют и обменных курсов. П
 Веб-интерфейс для проекта не подразумевается.
 
 # REST API
-#### - GET /currencies
+#### - GET /currency/findAll
 Получение списка валют.
 
-#### - GET /currency/EUR
+#### - GET /currency/findByCode/EUR
 Получение конкретной валюты.
 
-#### - POST /currencies
-Добавление новой валюты в базу. Данные передаются в теле запроса в в формате JSon. Ключи - - name, code, sign. 
+#### - POST /currency
+Добавление новой валюты в базу. Данные передаются в теле запроса в формате JSon. Ключи - name, code, sign. 
 
-#### - GET /exchangeRates
+#### - GET /exchangeRate/findAll
 Получение списка всех обменных курсов. 
 
 #### - GET /exchangeRate/USDRUB
 Получение конкретного обменного курса. Валютная пара задаётся идущими подряд кодами валют в адресе запроса. 
 
-#### - POST /exchangeRates
+#### - POST /exchangeRate
 Добавление нового обменного курса в базу. Данные передаются в теле запроса в формате JSon. Ключи - baseCurrencyCode, targetCurrencyCode, rate.
 
-#### - PUT /exchangeRate/USDRUB
-Обновление существующего в базе обменного курса. Валютная пара задаётся идущими подряд кодами валют в адресе запроса. Данные передаются в теле запроса в формате JSon. Единственное поле формы - rate.
+#### - PUT /exchangeRate
+Обновление существующего в базе обменного курса. Валютная пара задаётся идущими подряд кодами валют в адресе запроса. Данные передаются в теле запроса в формате JSon. Ключи - id, baseCurrencyCode, targetCurrencyCode, rate.
 
-#### - GET /exchange?from=BASE_CURRENCY_CODE&to=TARGET_CURRENCY_CODE&amount=$AMOUNT
-Расчёт перевода определённого количества средств из одной валюты в другую. Пример запроса - GET /exchange?from=USD&to=AUD&amount=10.
+#### - GET /exchange?from=BASE_CURRENCY_CODE&to=TARGET_CURRENCY_CODE&amount=AMOUNT
+Расчёт перевода определённого количества средств из одной валюты в другую. Пример запроса: /exchange?from=USD&to=AUD&amount=10.
 
 #### Получение курса для обмена может пройти по одному из трёх сценариев. Допустим, совершаем перевод из валюты A в валюту B:
 
@@ -50,4 +50,4 @@ REST API для описания валют и обменных курсов. П
 }
 Значение message зависит от того, какая именно ошибка произошла.
 
-### <a href="https://zhukovsd.github.io/java-backend-learning-course/Projects/CurrencyExchange/">Более подробное техническое задание<a/>
+### <a href="https://zhukovsd.github.io/java-backend-learning-course/projects/currency-exchange/">Более подробное техническое задание<a/>

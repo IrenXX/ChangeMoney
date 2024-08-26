@@ -1,4 +1,4 @@
-package ru.kemova.currency_exchange;
+package ru.kemova.currencyexchange;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

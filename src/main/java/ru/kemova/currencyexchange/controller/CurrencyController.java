@@ -1,45 +1,45 @@
-package ru.kemova.currency_exchange.controller;
+package ru.kemova.currencyexchange.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.kemova.currency_exchange.model.Currency;
-import ru.kemova.currency_exchange.services.CurrencyService;
+import ru.kemova.currencyexchange.model.Currency;
+import ru.kemova.currencyexchange.services.CurrencyService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping()
+@RequestMapping("/currency")
 @RequiredArgsConstructor
 public class CurrencyController {
 
     private final CurrencyService currencyService;
 
-    @GetMapping("/currencies")//findAll
+    @GetMapping("/findAll")
     public List<Currency> findAll() {
         return currencyService.findAll();
     }
 
-    @GetMapping("/currency/{code}") //findByCode
+    @GetMapping("/findByCode/{code}")
     public Currency findByCode(@PathVariable String code) {
         return currencyService.findByCode(code);
     }
 
-    @PostMapping("/currency")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void create(@RequestBody Currency currency) {
         currencyService.create(currency);
     }
 
-    @PutMapping("/currency")
+    @PutMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void update(@RequestBody Currency currency) {
         currencyService.update(currency);
     }
 
-    @DeleteMapping("/currency/{id}")
+    @DeleteMapping("/delete/{code}")
     @ResponseStatus(HttpStatus.GONE)
-    public void delete(@PathVariable Integer id) {
-        currencyService.delete(id);
+    public void delete(@PathVariable String code) {
+        currencyService.delete(code);
     }
 }

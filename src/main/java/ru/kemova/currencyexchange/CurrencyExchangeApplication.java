@@ -1,4 +1,4 @@
-package ru.kemova.currency_exchange;
+package ru.kemova.currencyexchange;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

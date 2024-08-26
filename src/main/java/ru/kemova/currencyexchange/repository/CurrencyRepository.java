@@ -1,8 +1,8 @@
-package ru.kemova.currency_exchange.repository;
+package ru.kemova.currencyexchange.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ru.kemova.currency_exchange.model.Currency;
+import ru.kemova.currencyexchange.model.Currency;
 
 import java.util.Optional;
 
