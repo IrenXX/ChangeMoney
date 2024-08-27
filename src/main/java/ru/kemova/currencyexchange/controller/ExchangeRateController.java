@@ -30,7 +30,7 @@ public class ExchangeRateController {
     }
 
     @GetMapping("/{code}") //findByCodePair
-    public Exchangerate findByCodePair(@PathVariable String code) {
+    public double findByCodePair(@PathVariable String code) {
         String baseCurrency, targetCurrency;
         baseCurrency = code.substring(0, 3);
         targetCurrency = code.substring(3);
@@ -42,12 +42,6 @@ public class ExchangeRateController {
     public void create(@RequestBody ExchangeRateDto rateDto) {
         exchangeRateService.create(rateDto);
     }
-
-//    @PutMapping//TODO сделать DTO
-//    @ResponseStatus(HttpStatus.ACCEPTED)
-//    public void update(@RequestBody Exchangerate exchangeRate) {
-//        exchangeRateService.update(exchangeRate);
-//    }
 
     @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.OK)

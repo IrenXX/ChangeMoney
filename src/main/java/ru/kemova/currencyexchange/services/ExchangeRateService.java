@@ -9,7 +9,7 @@ public interface ExchangeRateService {
 
     List<Exchangerate> findAll();
 
-    Exchangerate findByCodePair(String baseCurrency, String targetCurrency);
+    double findByCodePair(String baseCurrency, String targetCurrency);
 
     Exchangerate create(ExchangeRateDto rateDto);
 

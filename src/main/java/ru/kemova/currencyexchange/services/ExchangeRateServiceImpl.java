@@ -28,7 +28,7 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
 
     @Override
     @Transactional(readOnly = true)
-    public Exchangerate findByCodePair(String baseCurrency, String targetCurrency) {
+    public double findByCodePair(String baseCurrency, String targetCurrency) {
         log.info("findByCodePair exchange rate : {}, {}", baseCurrency, targetCurrency);
 
         return exchangeRateRepository.findByBaseCurrencyCodeAndTargetCurrencyCode(baseCurrency, targetCurrency)
@@ -36,7 +36,7 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
                 {
                     log.error("not found exception thrown");
                     throw new CurrencyException("currency-pair not found");
-                });
+                }).getRate();
     }
 
     //    @Transactional(readOnly = true)
@@ -81,7 +81,7 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
         exchangeRateRepository.delete(exchangeRateDelete);
     }
 
-    private Exchangerate getExchangeRateFromDTO(ExchangeRateDto rate) {
+    public Exchangerate getExchangeRateFromDTO(ExchangeRateDto rate) {
         Exchangerate to = new Exchangerate();
         to.setBaseCurrency(currencyRepository.findByCode(rate.getBaseCode())
                 .orElseThrow(() -> new CurrencyException("Currency (base code) should be not null")));

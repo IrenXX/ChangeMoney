@@ -11,7 +11,6 @@ import ru.kemova.currencyexchange.repository.ExchangeRateRepository;
 import ru.kemova.currencyexchange.util.CurrencyException;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -49,15 +48,15 @@ public class ExchangeServiceImpl implements ExchangeService {
                 answer = roundDoubles(amount * rate);
             } else {
                 String base = "USD";
-                Optional<Exchangerate> usdFromRate = exchangeRateRepository.
-                        findByBaseCurrencyCodeAndTargetCurrencyCode(base, from);
-                Optional<Exchangerate> usdToRate = exchangeRateRepository.
-                        findByBaseCurrencyCodeAndTargetCurrencyCode(base, to);
-                if ((usdFromRate.isPresent()) && usdToRate.isPresent()) {
-                    rate = 1 / (usdFromRate.get().getRate() / usdToRate.get().getRate());
+                Exchangerate usdFromRate = exchangeRateRepository.
+                        findByBaseCurrencyCodeAndTargetCurrencyCode(base, from)
+                        .orElseThrow(() -> new CurrencyException("currency-pair not found"));
+                Exchangerate usdToRate = exchangeRateRepository.
+                        findByBaseCurrencyCodeAndTargetCurrencyCode(base, to)
+                        .orElseThrow(() -> new CurrencyException("currency-pair not found"));
+                    rate = 1 / (usdFromRate.getRate() / usdToRate.getRate());
                     answer = roundDoubles(amount * rate);
                     log.info("USD cross-rate strategy USD - {}, USD - {}", from, to);
-                }
             }
         }
         return answer;
