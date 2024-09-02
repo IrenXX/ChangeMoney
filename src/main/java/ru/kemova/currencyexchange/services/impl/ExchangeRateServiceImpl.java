@@ -1,4 +1,4 @@
-package ru.kemova.currencyexchange.services;
+package ru.kemova.currencyexchange.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,8 +8,11 @@ import ru.kemova.currencyexchange.dto.ExchangeRateDto;
 import ru.kemova.currencyexchange.model.Exchangerate;
 import ru.kemova.currencyexchange.repository.CurrencyRepository;
 import ru.kemova.currencyexchange.repository.ExchangeRateRepository;
+import ru.kemova.currencyexchange.services.ExchangeRateService;
 import ru.kemova.currencyexchange.util.CurrencyException;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,14 +24,23 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Exchangerate> findAll() {
+    public List<ExchangeRateDto> findAll() {
         log.info("findAll exchange rates");
-        return exchangeRateRepository.findAll();
+        List<Exchangerate> all = exchangeRateRepository.findAll();
+        List<ExchangeRateDto> dtoList = new ArrayList<>();
+        for (Exchangerate exchangerate: all) {
+            ExchangeRateDto rateDto = new ExchangeRateDto();
+            rateDto.setBaseCode(exchangerate.getBaseCurrency().getCode());
+            rateDto.setTargetCode(exchangerate.getTargetCurrency().getCode());
+            rateDto.setRate(exchangerate.getRate());
+            dtoList.add(rateDto);
+        }
+        return dtoList;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public double findByCodePair(String baseCurrency, String targetCurrency) {
+    public BigDecimal findByCodePair(String baseCurrency, String targetCurrency) {
         log.info("findByCodePair exchange rate : {}, {}", baseCurrency, targetCurrency);
 
         return exchangeRateRepository.findByBaseCurrencyCodeAndTargetCurrencyCode(baseCurrency, targetCurrency)
@@ -38,17 +50,6 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
                     throw new CurrencyException("currency-pair not found");
                 }).getRate();
     }
-
-    //    @Transactional(readOnly = true)
-//    public ExchangeRate findById(int id) {
-//    Optional <ExchangeRate> getExchangeRate = exchangeRateRepository.findById(id);
-//        log.info("fidById exchange rate : " + id);
-//        return exchangeRateRepository.findById(id).get().orElseThrow(()->
-//            {
-    //            log.error("not found exception thrown");
-    //            return new CurrencyException("currency-pair not found");
-//            };);
-//    }
 
     @Override
     @Transactional
@@ -81,7 +82,7 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
         exchangeRateRepository.delete(exchangeRateDelete);
     }
 
-    public Exchangerate getExchangeRateFromDTO(ExchangeRateDto rate) {
+    private Exchangerate getExchangeRateFromDTO(ExchangeRateDto rate) {
         Exchangerate to = new Exchangerate();
         to.setBaseCurrency(currencyRepository.findByCode(rate.getBaseCode())
                 .orElseThrow(() -> new CurrencyException("Currency (base code) should be not null")));

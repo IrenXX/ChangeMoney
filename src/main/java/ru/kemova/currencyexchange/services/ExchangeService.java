@@ -1,6 +1,8 @@
 package ru.kemova.currencyexchange.services;
 
+import java.math.BigDecimal;
+
 public interface ExchangeService {
 
-    double exchange(String from, String to, int amount);
+    BigDecimal exchange(String from, String to, BigDecimal amount);
 }

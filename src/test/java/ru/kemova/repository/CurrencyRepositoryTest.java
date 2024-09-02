@@ -1,7 +1,16 @@
 package ru.kemova.repository;
 
-import lombok.AllArgsConstructor;
-import org.junit.jupiter.api.*;
+
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import ru.kemova.currencyexchange.CurrencyExchangeApplication;
 import ru.kemova.currencyexchange.model.Currency;
 import ru.kemova.currencyexchange.repository.CurrencyRepository;
 
@@ -12,18 +21,31 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static ru.kemova.TestData.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@AllArgsConstructor
+@DataJpaTest
 class CurrencyRepositoryTest {
+    @MockBean
     private CurrencyRepository repository;
+//    @Autowired
+//    private TestEntityManager entityManager;
 
 //    @BeforeEach
 //    void setUp() {
-//        repository = new CurrencyRepository();
+//        repository = new CurrencyRepository() {
+//            @Override
+//            public <S extends Currency, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+//                return null;
+//            }
+//
+//            @Override
+//            public List<Currency> findAll() {
+//                return null;
+//            }
+//        };
 //    }
 
     @Test
     @Order(1)
-    void findAll() {
+    public void findAllTest() {
         List<Currency> actual = repository.findAll();
         assertTrue(actual.containsAll(currencies));
 //        assertThat(actual).hasSameElementsAs(TestData.currencies);

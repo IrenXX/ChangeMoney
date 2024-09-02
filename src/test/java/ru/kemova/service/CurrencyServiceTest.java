@@ -1,8 +1,11 @@
 package ru.kemova.service;
 
 import org.junit.jupiter.api.*;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.kemova.currencyexchange.model.Currency;
+import ru.kemova.currencyexchange.repository.CurrencyRepository;
 import ru.kemova.currencyexchange.services.CurrencyService;
+import ru.kemova.currencyexchange.services.impl.CurrencyServiceImpl;
 import ru.kemova.currencyexchange.util.CurrencyException;
 
 import java.util.List;
@@ -13,8 +16,9 @@ import static ru.kemova.TestData.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CurrencyServiceTest {
-
-    private CurrencyService service;
+    @MockBean
+    private CurrencyRepository currencyRepository;
+    private final CurrencyService service = new CurrencyServiceImpl(currencyRepository);
 
 //    @BeforeEach
 //    void setUp() {

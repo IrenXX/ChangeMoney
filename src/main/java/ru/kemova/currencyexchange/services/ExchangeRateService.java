@@ -3,13 +3,14 @@ package ru.kemova.currencyexchange.services;
 import ru.kemova.currencyexchange.dto.ExchangeRateDto;
 import ru.kemova.currencyexchange.model.Exchangerate;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface ExchangeRateService {
 
-    List<Exchangerate> findAll();
+    List<ExchangeRateDto> findAll();
 
-    double findByCodePair(String baseCurrency, String targetCurrency);
+    BigDecimal findByCodePair(String baseCurrency, String targetCurrency);
 
     Exchangerate create(ExchangeRateDto rateDto);
 

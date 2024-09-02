@@ -1,13 +1,16 @@
-package ru.kemova.currencyexchange.services;
+package ru.kemova.currencyexchange.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kemova.currencyexchange.dto.CurrencyDto;
 import ru.kemova.currencyexchange.model.Currency;
 import ru.kemova.currencyexchange.repository.CurrencyRepository;
+import ru.kemova.currencyexchange.services.CurrencyService;
 import ru.kemova.currencyexchange.util.CurrencyException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,20 +21,35 @@ public class CurrencyServiceImpl implements CurrencyService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Currency> findAll() {
+    public List<CurrencyDto> findAll() {
         log.info("findAll currencies");
-        return currencyRepository.findAll();
+        List<Currency> all = currencyRepository.findAll();
+        List<CurrencyDto> dtoList = new ArrayList<>();
+        for (Currency currency : all) {
+            CurrencyDto currencyDto = getCurrencyDto(currency);
+            dtoList.add(currencyDto);
+        }
+        return dtoList;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Currency findByCode(String code) {
+    public CurrencyDto findByCode(String code) {
         log.info("findByCode currency : " + code);
-        return currencyRepository.findByCode(code).orElseThrow(() ->
+        Currency currency = currencyRepository.findByCode(code).orElseThrow(() ->
         {
             log.error("currency not found thrown exception");
             return new CurrencyException("currency not found");
         });
+        return getCurrencyDto(currency);
+    }
+
+    private CurrencyDto getCurrencyDto(Currency currency) {
+        CurrencyDto currencyDto = new CurrencyDto();
+        currencyDto.setCode(currency.getCode());
+        currencyDto.setSign(currency.getSign());
+        currencyDto.setFullName(currency.getFullName());
+        return currencyDto;
     }
 
     @Override
