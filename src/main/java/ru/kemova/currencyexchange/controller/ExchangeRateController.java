@@ -1,13 +1,12 @@
 package ru.kemova.currencyexchange.controller;
 
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.kemova.currencyexchange.dto.ExchangeRateDto;
 import ru.kemova.currencyexchange.model.Exchangerate;
 import ru.kemova.currencyexchange.services.ExchangeRateService;
-import ru.kemova.currencyexchange.services.ExchangeServiceImpl;
+import ru.kemova.currencyexchange.services.impl.ExchangeServiceImpl;
 
 import java.util.List;
 
@@ -34,7 +33,7 @@ public class ExchangeRateController {
         String baseCurrency, targetCurrency;
         baseCurrency = code.substring(0, 3);
         targetCurrency = code.substring(3);
-        return exchangeRateService.findByCodePair(baseCurrency, targetCurrency);
+        return exchangeRateService.findByCodePair(baseCurrency, targetCurrency).getRate();
     }
 
     @PostMapping

@@ -1,4 +1,4 @@
-package ru.kemova.currencyexchange.services;
+package ru.kemova.currencyexchange.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kemova.currencyexchange.model.Currency;
 import ru.kemova.currencyexchange.repository.CurrencyRepository;
+import ru.kemova.currencyexchange.services.CurrencyService;
 import ru.kemova.currencyexchange.util.CurrencyException;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Override
     @Transactional(readOnly = true)
     public Currency findByCode(String code) {
-        log.info("findByCode currency : " + code);
+        log.info("findByCode currency : {}", code);
         return currencyRepository.findByCode(code).orElseThrow(() ->
         {
             log.error("currency not found thrown exception");
@@ -39,8 +40,8 @@ public class CurrencyServiceImpl implements CurrencyService {
     public Currency create(Currency currency) {
         log.info("create currency in database");
 
-        if (currencyRepository.findByCode(currency.getCode()).isEmpty()) {
-            log.info("recorder writes with Code: " + currency.getCode());
+        if (findByCode(currency.getCode())==null) {
+            log.info("recorder writes with Code: {}", currency.getCode());
             return currencyRepository.save(currency);
         } else {
             log.error("already exists exception thrown");
@@ -51,23 +52,16 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Override
     @Transactional
     public void update(Currency currency) {
-        if (currencyRepository.findByCode(currency.getCode()).isEmpty()) {
-            log.error("currency not found thrown exception");
-            throw new CurrencyException("currency not found");
-        }
-        log.info("update currency in database : " + currency.getCode());
+        findByCode(currency.getCode());
+        log.info("update currency in database : {}", currency.getCode());
         currencyRepository.save(currency);
     }
 
     @Override
     @Transactional
     public void delete(String code) {
-        Currency currencyDelete = currencyRepository.findByCode(code).orElseThrow(() ->
-        {
-            log.error("currency not found thrown exception");
-            return new CurrencyException("currency not found");
-        });
-        log.info("delete currency from database : " + code);
+        Currency currencyDelete = findByCode(code);
+        log.info("delete currency from database : {}", code);
         currencyRepository.delete(currencyDelete);
     }
 }

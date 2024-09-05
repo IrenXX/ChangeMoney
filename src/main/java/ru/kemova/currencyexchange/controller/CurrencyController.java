@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.kemova.currencyexchange.model.Currency;
 import ru.kemova.currencyexchange.services.CurrencyService;
+import ru.kemova.currencyexchange.util.CurrencyException;
 
 import java.util.List;
 
@@ -16,11 +17,13 @@ public class CurrencyController {
     private final CurrencyService currencyService;
 
     @GetMapping("/findAll")
+    @ResponseStatus(HttpStatus.OK)
     public List<Currency> findAll() {
         return currencyService.findAll();
     }
 
     @GetMapping("/findByCode/{code}")
+    @ResponseStatus(HttpStatus.OK)
     public Currency findByCode(@PathVariable String code) {
         return currencyService.findByCode(code);
     }
@@ -32,7 +35,7 @@ public class CurrencyController {
     }
 
     @PutMapping
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(HttpStatus.OK)
     public void update(@RequestBody Currency currency) {
         currencyService.update(currency);
     }
@@ -41,5 +44,11 @@ public class CurrencyController {
     @ResponseStatus(HttpStatus.GONE)
     public void delete(@PathVariable String code) {
         currencyService.delete(code);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    private StockErrorResponse handleException(CurrencyException exception) {
+        return new StockErrorResponse(exception.getMessage());
     }
 }
