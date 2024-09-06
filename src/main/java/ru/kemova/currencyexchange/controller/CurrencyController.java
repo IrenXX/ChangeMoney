@@ -3,9 +3,9 @@ package ru.kemova.currencyexchange.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.kemova.currencyexchange.dto.CurrencyDto;
 import ru.kemova.currencyexchange.model.Currency;
 import ru.kemova.currencyexchange.services.CurrencyService;
-import ru.kemova.currencyexchange.util.CurrencyException;
 
 import java.util.List;
 
@@ -16,14 +16,12 @@ public class CurrencyController {
 
     private final CurrencyService currencyService;
 
-    @GetMapping("/findAll")
-    @ResponseStatus(HttpStatus.OK)
+    @GetMapping
     public List<Currency> findAll() {
         return currencyService.findAll();
     }
 
-    @GetMapping("/findByCode/{code}")
-    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{code}")
     public Currency findByCode(@PathVariable String code) {
         return currencyService.findByCode(code);
     }
@@ -46,9 +44,9 @@ public class CurrencyController {
         currencyService.delete(code);
     }
 
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    private StockErrorResponse handleException(CurrencyException exception) {
-        return new StockErrorResponse(exception.getMessage());
-    }
+//    @ExceptionHandler
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    private StockErrorResponse handleException(CurrencyException exception) {
+//        return new StockErrorResponse(exception.getMessage());
+//    }
 }

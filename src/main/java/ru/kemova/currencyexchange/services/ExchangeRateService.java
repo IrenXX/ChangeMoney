@@ -9,6 +9,7 @@ public interface ExchangeRateService {
 
     List<Exchangerate> findAll();
 
+//    BigDecimal findByCodePair(String baseCurrency, String targetCurrency);
     Exchangerate findByCodePair(String baseCurrency, String targetCurrency);
 
     Exchangerate create(ExchangeRateDto rateDto);

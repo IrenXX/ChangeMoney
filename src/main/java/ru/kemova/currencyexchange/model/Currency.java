@@ -1,5 +1,6 @@
 package ru.kemova.currencyexchange.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -19,18 +20,17 @@ public class Currency {
     @Id
     private String code;
 
-    @NotBlank
+    @NotBlank (message = "Please enter fullName")
     private String fullName;
 
-    @NotBlank
+    @NotBlank (message = "Please enter sign")
     private String sign;
 
-    //TODO
-    @OneToMany(mappedBy = "baseCurrency", cascade = CascadeType.ALL)
-    @ToString.Exclude
-    private List<Exchangerate> exchangeBaseRates = new ArrayList<>();
+    @OneToMany(mappedBy = "baseCurrency", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Exchangerate> exchangeBaseRates;
 
-    @OneToMany(mappedBy = "targetCurrency", cascade = CascadeType.ALL)
-    @ToString.Exclude
-    private List<Exchangerate> exchangeTargetRates = new ArrayList<>();
+    @OneToMany(mappedBy = "targetCurrency", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Exchangerate> exchangeTargetRates;
 }

@@ -6,59 +6,63 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kemova.currencyexchange.dto.ExchangeDto;
 import ru.kemova.currencyexchange.model.Exchangerate;
-import ru.kemova.currencyexchange.repository.CurrencyRepository;
 import ru.kemova.currencyexchange.repository.ExchangeRateRepository;
-import ru.kemova.currencyexchange.services.ExchangeRateService;
 import ru.kemova.currencyexchange.services.ExchangeService;
 import ru.kemova.currencyexchange.util.CurrencyException;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class ExchangeServiceImpl implements ExchangeService {
     private static final int ROUND_SCALE = 4;
-    private final ExchangeRateService exchangeService;
+    private final ExchangeRateRepository exchangeRateRepository;
 
     @Override
     @Transactional
-    public double exchange(String from, String to, int amount) {
+    public BigDecimal exchange(String from, String to, BigDecimal amount) {
 
-        Exchangerate codePair = exchangeService.findByCodePair(from, to);
+        Optional<Exchangerate> codePair = exchangeRateRepository.findByBaseCurrencyCodeAndTargetCurrencyCode(from, to);
+        Optional<Exchangerate> codePairRevers = exchangeRateRepository.findByBaseCurrencyCodeAndTargetCurrencyCode(to, from);
 
-        double rate = codePair.getRate();
-        double answer = 0.0;
-        log.debug("exchange from {} to {} amount {}", from, to, amount);
+        BigDecimal rate;
+        BigDecimal a = BigDecimal.valueOf(1);
+        BigDecimal answer;
+        log.info("exchange from {} to {} amount {}", from, to, amount);
 
-
-        if (!from.equals(to)) {
+        if (codePair.isPresent()) {
+            rate = codePair.get().getRate();
+            answer = rate.multiply(amount);
             log.info("straight strategy from {} to {}", from, to);
-            answer = roundDoubles(amount * rate);
-            if (codePair!=null) {
-                log.info("reversed strategy to {} from {}", to, from);
-                rate = 1 / rate;
-                answer = roundDoubles(amount * rate);
-            } else {
-                String base = "USD";
-                Exchangerate usdFromRate = exchangeService.
-                        findByCodePair(base, from);
-                Exchangerate usdToRate = exchangeService.
-                        findByCodePair(base, to);
-                    rate = 1 / (usdFromRate.getRate() / usdToRate.getRate());
-                    answer = roundDoubles(amount * rate);
-                    log.info("USD cross-rate strategy USD - {}, USD - {}", from, to);
-            }
+        } else if (codePairRevers.isPresent()) {
+            rate = codePairRevers.get().getRate();
+            rate = a.divide(rate, ROUND_SCALE, BigDecimal.ROUND_UP);
+            answer = rate.multiply(amount);
+            log.info("reversed strategy to {} from {}", to, from);
+        } else {
+            String base = "USD";
+            Exchangerate usdFromRate = exchangeRateRepository.
+                    findByBaseCurrencyCodeAndTargetCurrencyCode(base, from)
+                    .orElseThrow(() -> new CurrencyException("currency-pair not found"));
+            Exchangerate usdToRate = exchangeRateRepository.
+                    findByBaseCurrencyCodeAndTargetCurrencyCode(base, to)
+                    .orElseThrow(() -> new CurrencyException("currency-pair not found"));
+            rate = a.divide(usdFromRate.getRate(), ROUND_SCALE, BigDecimal.ROUND_UP)
+                    .divide(usdToRate.getRate(), ROUND_SCALE, BigDecimal.ROUND_UP);
+            answer = rate.multiply(amount).setScale(ROUND_SCALE);
+            log.info("USD cross-rate strategy USD - {}, USD - {}", from, to);
         }
         return answer;
     }
 
-    private Exchangerate getExchangeFromDTO(ExchangeDto exchangeDto) {
-        Exchangerate to = exchangeService.findByCodePair(exchangeDto.getFrom(),
-                        exchangeDto.getTo());
-        log.info("get transfer object");
-        return to;
-    }
+//    private Exchangerate getExchangeFromDTO(ExchangeDto exchangeDto) {
+//        Exchangerate to = exchangeService.findByCodePair(exchangeDto.getFrom(),
+//                exchangeDto.getTo());
+//        log.info("get transfer object");
+//        return to;
+//    }
 
     private static double roundDoubles(double number) {
         BigDecimal around = new BigDecimal(number);

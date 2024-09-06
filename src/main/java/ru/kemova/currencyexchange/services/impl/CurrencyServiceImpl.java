@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kemova.currencyexchange.dto.CurrencyDto;
 import ru.kemova.currencyexchange.model.Currency;
 import ru.kemova.currencyexchange.repository.CurrencyRepository;
 import ru.kemova.currencyexchange.services.CurrencyService;
@@ -20,7 +21,6 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Override
     @Transactional(readOnly = true)
     public List<Currency> findAll() {
-        log.info("findAll currencies");
         return currencyRepository.findAll();
     }
 
@@ -28,11 +28,12 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Transactional(readOnly = true)
     public Currency findByCode(String code) {
         log.info("findByCode currency : {}", code);
-        return currencyRepository.findByCode(code).orElseThrow(() ->
-        {
-            log.error("currency not found thrown exception");
-            return new CurrencyException("currency not found");
-        });
+        return currencyRepository.findByCode(code)
+                .orElseThrow(() ->
+                {
+                    log.error("currency not found thrown exception");
+                    return new CurrencyException("currency not found");
+                });
     }
 
     @Override
@@ -40,7 +41,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     public Currency create(Currency currency) {
         log.info("create currency in database");
 
-        if (findByCode(currency.getCode())==null) {
+        if (findByCode(currency.getCode()) == null) {
             log.info("recorder writes with Code: {}", currency.getCode());
             return currencyRepository.save(currency);
         } else {
@@ -60,8 +61,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Override
     @Transactional
     public void delete(String code) {
-        Currency currencyDelete = findByCode(code);
+        currencyRepository.delete(findByCode(code));
         log.info("delete currency from database : {}", code);
-        currencyRepository.delete(currencyDelete);
     }
 }

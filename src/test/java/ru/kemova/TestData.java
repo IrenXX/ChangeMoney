@@ -26,8 +26,8 @@ public class TestData {
     public static final String BASE = currency2.getCode();
     public static final String TARGET = currency3.getCode();
     public static final List<Currency> currencies = List.of(currency1, currency2, currency3, currency4);
-    public static final Exchangerate rate1 = new Exchangerate(1, currency2, currency3, 90.59);
-    public static final Exchangerate rate2 = new Exchangerate(2, currency2, currency4, 0.89);
+    public static final Exchangerate rate1 = new Exchangerate(1, 0.00, currency3, currency2);
+    public static final Exchangerate rate2 = new Exchangerate(2, 0.00, currency4, currency1);
     public static final List<Exchangerate> rates = List.of(rate1, rate2);
     public static final ExchangeRateDto rateDto = new ExchangeRateDto(currency2.getCode(), currency3.getCode(), 90.59);
     public static final ExchangeRateDto RATE_TO_CREATE = new ExchangeRateDto(currency1.getCode(), currency2.getCode(), 1.0);
