@@ -71,7 +71,7 @@ public class CurrencyServiceTest {
     @Order(8)
     void update() {
         CURRENCY_TO_UPDATE.setCode(service.findByCode(CURRENCY_TO_CREATE.getCode()).getCode());
-        service.update(CURRENCY_TO_UPDATE);
+        service.update(, CURRENCY_TO_UPDATE);
         assertThat(CURRENCY_TO_UPDATE).usingRecursiveComparison()
                 .isEqualTo(service.findByCode(CURRENCY_TO_UPDATE.getCode()));
     }
@@ -80,13 +80,13 @@ public class CurrencyServiceTest {
     @Order(9)
     void updateWithInvalidId() {
         CURRENCY_TO_UPDATE.setCode(INVALID_CODE);
-        Assertions.assertThrows(NullPointerException.class, () -> service.update(CURRENCY_TO_UPDATE));
+        Assertions.assertThrows(NullPointerException.class, () -> service.update(, CURRENCY_TO_UPDATE));
     }
 
     @Test
     @Order(10)
     void updateWithNullId() {
-        Assertions.assertThrows(NullPointerException.class, () -> service.update(CURRENCY_TO_UPDATE));
+        Assertions.assertThrows(NullPointerException.class, () -> service.update(, CURRENCY_TO_UPDATE));
     }
 
     @Test

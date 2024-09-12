@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,10 +19,10 @@ public class Currency {
     @Id
     private String code;
 
-    @NotBlank (message = "Please enter fullName")
+    @NotBlank
     private String fullName;
 
-    @NotBlank (message = "Please enter sign")
+    @NotBlank
     private String sign;
 
     @OneToMany(mappedBy = "baseCurrency", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

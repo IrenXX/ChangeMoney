@@ -1,8 +1,6 @@
 package ru.kemova.currencyexchange.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -21,7 +19,7 @@ public class Exchangerate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull (message = "Please enter rate")
+    @NotNull(message = "Please enter rate")
     private BigDecimal rate;
 
     @ManyToOne

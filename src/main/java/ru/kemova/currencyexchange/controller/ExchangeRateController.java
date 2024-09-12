@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.kemova.currencyexchange.dto.ExchangeRateDto;
+import ru.kemova.currencyexchange.dto.ExchangeResponseDto;
 import ru.kemova.currencyexchange.model.Exchangerate;
 import ru.kemova.currencyexchange.services.ExchangeRateService;
 import ru.kemova.currencyexchange.services.ExchangeService;
@@ -19,18 +20,14 @@ public class ExchangeRateController {
     private final ExchangeService exchangeService;
 
     //    @PostConstruct
-    @GetMapping
+    @GetMapping()
+    @ResponseStatus(HttpStatus.OK)
     public List<Exchangerate> findAll() {
         return exchangeRateService.findAll();
     }
 
-    @GetMapping("/change")
-    public BigDecimal exchangeFromTo(@RequestParam String from, @RequestParam String to,
-                                     @RequestParam BigDecimal amount) {
-        return exchangeService.exchange(from, to, amount);
-    }
-
-    @GetMapping("/{code}") //findByCodePair
+    @GetMapping("/{code}")
+    @ResponseStatus(HttpStatus.OK)
     public BigDecimal findByCodePair(@PathVariable String code) {
         String baseCurrency, targetCurrency;
         baseCurrency = code.substring(0, 3).toUpperCase();
@@ -38,21 +35,28 @@ public class ExchangeRateController {
         return exchangeRateService.findByCodePair(baseCurrency, targetCurrency).getRate();
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Exchangerate create(@RequestBody ExchangeRateDto rate) {
-       return exchangeRateService.create(rate);
+    @GetMapping("/change")
+    @ResponseStatus(HttpStatus.OK)
+    public ExchangeResponseDto exchangeFromTo(@RequestParam String from, @RequestParam String to,
+                                              @RequestParam BigDecimal amount) {
+        return exchangeService.exchange(from.toUpperCase(), to.toUpperCase(), amount);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
+    public Exchangerate create(@RequestBody ExchangeRateDto exchangeRateDto) {
+        return exchangeRateService.create(exchangeRateDto);
+    }
+
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable Integer id) {
+    public void update(@PathVariable int id, @RequestBody ExchangeRateDto exchangeRateDto) {
+        exchangeRateService.update(id, exchangeRateDto);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable int id) {
         exchangeRateService.delete(id);
     }
-
-    //    @ExceptionHandler
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    private StockErrorResponse handleException(CurrencyException exception) {
-//        return new StockErrorResponse(exception.getMessage());
-//    }
 }

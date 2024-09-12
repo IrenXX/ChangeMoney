@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS exchangerate (
         id SERIAL PRIMARY KEY ,
         base_currency_code VARCHAR NOT NULL ,
         target_currency_code VARCHAR NOT NULL ,
-        rate DECIMAL(6, 4) NOT NULL ,
+        rate DECIMAL(8, 4) NOT NULL ,
         FOREIGN KEY (base_currency_code) REFERENCES currency (code) ON DELETE CASCADE,
         FOREIGN KEY (target_currency_code) REFERENCES currency (code) ON DELETE CASCADE );
 

@@ -7,9 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ExchangeDto {
+public class CurrencyDtoForUpd {
 
-    private String from;
-    private String to;
-    private int amount;
+    private String fullName;
+    private String sign;
 }
