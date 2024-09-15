@@ -91,8 +91,8 @@ REST API для описания валют и обменных курсов.
 
 Для развертывания приложения в Docker в папке проекта выполнить последовательно следующие команды:
 
-    docker build -t currency-exchanger . 
-    docker run -d -p 8080:8080 currency-exchanger 
+    docker build -t currencyexchange . 
+    docker run -d -p 8080:8080 currencyexchange 
 После успешного выполнения команд можно делать запросы через браузер или Postman по адресу http://localhost:8080/CurrencyExchanger в соответствии с описанным выше REST API.
 
 ### План работы над приложением

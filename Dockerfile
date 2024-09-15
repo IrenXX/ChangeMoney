@@ -8,7 +8,7 @@ ENV CATALINA_HOME /usr/local/tomcat
 ENV TOMCAT_WEBAPPS $CATALINA_HOME/webapps
 
 # Set up current directory
-WORKDIR /currencyExchanger
+WORKDIR /currencyexchange
 
 # Copy project into Ubuntu
 COPY . .
@@ -20,7 +20,7 @@ RUN apt -y install maven
 # Create .WAR file
 RUN mvn package
 # Copy .WAR file into /usr/local/tomcat
-RUN cp ./target/CurrencyExchanger.war $TOMCAT_WEBAPPS
+RUN cp ./target/currencyexchange.war $TOMCAT_WEBAPPS
 # Copy database into /usr/local/tomcat/webapps
 RUN cp ./src/main/resources/currencyExchangerDB $CATALINA_HOME
 
