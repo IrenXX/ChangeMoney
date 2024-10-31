@@ -22,7 +22,7 @@ RUN mvn package
 # Copy .WAR file into /usr/local/tomcat
 RUN cp ./target/currencyexchange.war $TOMCAT_WEBAPPS
 # Copy database into /usr/local/tomcat/webapps
-RUN cp ./src/main/resources/currencyExchangerDB $CATALINA_HOME
+RUN cp ./src/main/resources/exchange $CATALINA_HOME
 
 # Set up port
 EXPOSE 8080
